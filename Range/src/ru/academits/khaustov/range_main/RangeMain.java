@@ -14,8 +14,8 @@ public class RangeMain {
         System.out.println("Начало второго диапазона: " + range2.getFrom());
         System.out.println("Конец второго диапазона: " + range2.getTo());
 
-        System.out.println("Длина первого диапазона равна: " + range1.getRangeLength());
-        System.out.println("Длина второго диапазона равна: " + range2.getRangeLength());
+        System.out.println("Длина первого диапазона равна: " + range1.getLength());
+        System.out.println("Длина второго диапазона равна: " + range2.getLength());
 
         double number = 14.5;
 
@@ -85,8 +85,8 @@ public class RangeMain {
         System.out.println("Новое начало второго диапазона равно: " + range2.getFrom());
         System.out.println("Новый конец второго диапазона равен: " + range2.getTo());
 
-        System.out.println("Новая длина первого диапазона равна: " + range1.getRangeLength());
-        System.out.println("Новая длина второго диапазона равна: " + range2.getRangeLength());
+        System.out.println("Новая длина первого диапазона равна: " + range1.getLength());
+        System.out.println("Новая длина второго диапазона равна: " + range2.getLength());
 
         if (range1.isInside(number)) {
             System.out.println("Число " + number + " принадлежит первому диапазону");
