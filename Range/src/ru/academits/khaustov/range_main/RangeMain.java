@@ -2,20 +2,12 @@ package ru.academits.khaustov.range_main;
 
 import ru.academits.khaustov.range.Range;
 
-import java.util.Arrays;
-
 public class RangeMain {
     public static void main(String[] args) {
         Range range1 = new Range(12.3, 16.7);
         Range range2 = new Range(14.3, 15.9);
 
-        System.out.println("Начало первого диапазона: " + range1.getFrom());
-        System.out.println("Конец первого диапазона: " + range1.getTo());
-        System.out.println("Начало второго диапазона: " + range2.getFrom());
-        System.out.println("Конец второго диапазона: " + range2.getTo());
-
-        System.out.println("Длина первого диапазона равна: " + range1.getLength());
-        System.out.println("Длина второго диапазона равна: " + range2.getLength());
+        System.out.println(range1.toString(range2));
 
         double number = 14.5;
 
@@ -31,46 +23,32 @@ public class RangeMain {
             System.out.println("Число " + number + " не принадлежит второму диапазону");
         }
 
-        double[] intervalsIntersection = range1.getIntervalsIntersection(range2);
+        Range intervalsIntersection = range1.getIntersection(range2);
 
         if (intervalsIntersection == null) {
             System.out.println("Диапазоны не пересекаются");
         } else {
-            System.out.println("Диапазоны пересекаются в точках: " + Arrays.toString(intervalsIntersection));
+            System.out.println("Диапазоны пересекаются в точках: (" + intervalsIntersection.getFrom() + ", " + intervalsIntersection.getTo() + ")");
         }
 
-        Range[] intervalsUnion = range1.getIntervalsUnion(range1, range2);
+        Range[] intervalsUnion = range1.getUnion(range2);
 
         if (intervalsUnion.length == 1) {
-            double from = intervalsUnion[0].getFrom();
-            double to = intervalsUnion[0].getTo();
-
-            System.out.printf("Объединение двух диапазонов: [%f, %f]%n", from, to);
+            System.out.printf("Объединение двух диапазонов: [(%f, %f)]%n", intervalsUnion[0].getFrom(), intervalsUnion[0].getTo());
         } else {
-            double from1 = intervalsUnion[0].getFrom();
-            double to1 = intervalsUnion[0].getTo();
-            double from2 = intervalsUnion[1].getFrom();
-            double to2 = intervalsUnion[1].getFrom();
-
-            System.out.printf("Объединение двух диапазонов: [%f, %f], [%f, %f]%n", from1, to1, from2, to2);
+            System.out.printf("Объединение двух диапазонов: [(%f, %f), (%f, %f)]%n", intervalsUnion[0].getFrom(), intervalsUnion[0].getTo(),
+                    intervalsUnion[1].getFrom(), intervalsUnion[1].getTo());
         }
 
-        Range[] intervalsDifference = range1.getIntervalsDifference(range1, range2);
+        Range[] intervalsDifference = range1.getDifference(range2);
 
-        if (intervalsDifference == null) {
-            System.out.println("Разность диапазонов равна нулю");
+        if (intervalsDifference.length == 0) {
+            System.out.printf("Разность диапазонов равна []%n");
         } else if (intervalsDifference.length == 1) {
-            double from = intervalsDifference[0].getFrom();
-            double to = intervalsDifference[0].getTo();
-
-            System.out.printf("Разность диапазонов равна: [%f, %f]%n", from, to);
+            System.out.printf("Разность диапазонов равна: [(%f, %f)]%n", intervalsDifference[0].getFrom(), intervalsDifference[0].getTo());
         } else {
-            double from1 = intervalsDifference[0].getFrom();
-            double to1 = intervalsDifference[0].getTo();
-            double from2 = intervalsDifference[1].getFrom();
-            double to2 = intervalsDifference[1].getTo();
-
-            System.out.printf("Разность диапазонов равна: [%f, %f], [%f, %f]%n", from1, to1, from2, to2);
+            System.out.printf("Разность диапазонов равна: [(%f, %f), (%f, %f)]%n", intervalsDifference[0].getFrom(), intervalsDifference[0].getTo(),
+                    intervalsDifference[1].getFrom(), intervalsDifference[1].getTo());
         }
 
         System.out.println();
@@ -80,13 +58,7 @@ public class RangeMain {
         range2.setFrom(12);
         range2.setTo(13.7);
 
-        System.out.println("Новое начало первого диапазона равно: " + range1.getFrom());
-        System.out.println("Новый конец первого диапазона равен: " + range1.getTo());
-        System.out.println("Новое начало второго диапазона равно: " + range2.getFrom());
-        System.out.println("Новый конец второго диапазона равен: " + range2.getTo());
-
-        System.out.println("Новая длина первого диапазона равна: " + range1.getLength());
-        System.out.println("Новая длина второго диапазона равна: " + range2.getLength());
+        System.out.println(range1.toString(range2));
 
         if (range1.isInside(number)) {
             System.out.println("Число " + number + " принадлежит первому диапазону");
@@ -100,46 +72,32 @@ public class RangeMain {
             System.out.println("Число " + number + " не принадлежит второму диапазону");
         }
 
-        intervalsIntersection = range1.getIntervalsIntersection(range2);
+        intervalsIntersection = range1.getIntersection(range2);
 
         if (intervalsIntersection == null) {
             System.out.println("Диапазоны не пересекаются");
         } else {
-            System.out.println("Диапазоны пересекаются в точках: " + Arrays.toString(intervalsIntersection));
+            System.out.println("Диапазоны пересекаются в точках: (" + intervalsIntersection.getFrom() + ", " + intervalsIntersection.getTo() + ")");
         }
 
-        intervalsUnion = range1.getIntervalsUnion(range1, range2);
+        intervalsUnion = range1.getUnion(range2);
 
         if (intervalsUnion.length == 1) {
-            double from = intervalsUnion[0].getFrom();
-            double to = intervalsUnion[0].getTo();
-
-            System.out.printf("Объединение двух диапазонов: [%f, %f]%n", from, to);
+            System.out.printf("Объединение двух диапазонов: [(%f, %f)]%n", intervalsUnion[0].getFrom(), intervalsUnion[0].getTo());
         } else {
-            double from1 = intervalsUnion[0].getFrom();
-            double to1 = intervalsUnion[0].getTo();
-            double from2 = intervalsUnion[1].getFrom();
-            double to2 = intervalsUnion[1].getFrom();
-
-            System.out.printf("Объединение двух диапазонов: [%f, %f], [%f, %f]%n", from1, to1, from2, to2);
+            System.out.printf("Объединение двух диапазонов: [(%f, %f), (%f, %f)]%n", intervalsUnion[0].getFrom(), intervalsUnion[0].getTo(),
+                    intervalsUnion[1].getFrom(), intervalsUnion[1].getTo());
         }
 
-        intervalsDifference = range1.getIntervalsDifference(range1, range2);
+        intervalsDifference = range1.getDifference(range2);
 
-        if (intervalsDifference == null) {
-            System.out.println("Разность диапазонов равна нулю");
+        if (intervalsDifference.length == 0) {
+            System.out.printf("Разность диапазонов равна []%n");
         } else if (intervalsDifference.length == 1) {
-            double from = intervalsDifference[0].getFrom();
-            double to = intervalsDifference[0].getTo();
-
-            System.out.printf("Разность диапазонов равна: [%f, %f]%n", from, to);
+            System.out.printf("Разность диапазонов равна: [(%f, %f)]%n", intervalsDifference[0].getFrom(), intervalsDifference[0].getTo());
         } else {
-            double from1 = intervalsDifference[0].getFrom();
-            double to1 = intervalsDifference[0].getTo();
-            double from2 = intervalsDifference[1].getFrom();
-            double to2 = intervalsDifference[1].getTo();
-
-            System.out.printf("Разность диапазонов равна: [%f, %f], [%f, %f]%n", from1, to1, from2, to2);
+            System.out.printf("Разность диапазонов равна: [(%f, %f), (%f, %f)]%n", intervalsDifference[0].getFrom(), intervalsDifference[0].getTo(),
+                    intervalsDifference[1].getFrom(), intervalsDifference[1].getTo());
         }
     }
 }

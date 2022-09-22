@@ -33,78 +33,63 @@ public class Range {
         return number >= from && number <= to;
     }
 
-    public double[] getIntervalsIntersection(Range range2) {
-        double from1 = from;
-        double to1 = to;
-        double from2 = range2.getFrom();
-        double to2 = range2.getTo();
+    public String toString(Range range) {
+        return
+                "Начало первого диапазона: " + this.from + "\n"
+                        + "Конец первого диапазона: " + this.to + "\n"
+                        + "Начало второго диапазона: " + range.from + "\n"
+                        + "Конец второго диапазона: " + range.to + "\n"
+                        + "Длина первого диапазона равна: " + this.getLength() + "\n"
+                        + "Длина второго диапазона равна: " + range.getLength();
+    }
 
-        if (to1 <= from2 || to2 <= from1) {
+    public Range getIntersection(Range range) {
+        if (this.to <= range.from || range.to <= this.from) {
             return null;
         }
 
-        double[] intersection = new double[2];
-        intersection[0] = Math.max(from1, from2);
-        intersection[1] = Math.min(to1, to2);
-
-        return intersection;
+        return new Range(Math.max(this.from, range.from), Math.min(this.to, range.to));
     }
 
-    public Range[] getIntervalsUnion(Range range1, Range range2) {
-        double from1 = range1.getFrom();
-        double to1 = range1.getTo();
-        double from2 = range2.getFrom();
-        double to2 = range2.getTo();
-        Range[] union;
-
-        if (to1 < from2 || to2 < from1) {
-            union = new Range[2];
-            union[0] = range1;
-            union[1] = range2;
-
-            return union;
+    public Range[] getUnion(Range range) {
+        if (this.to < range.from || range.to < this.from) {
+            return new Range[] {
+                    new Range(this.from, this.to),
+                    new Range(range.from, range.to)
+            };
         }
 
-        union = new Range[1];
-        Range unionRange = new Range(Math.min(from1, from2), Math.max(to1, to2));
-        union[0] = unionRange;
-
-        return union;
+        return new Range[] {
+                new Range(Math.min(this.from, range.from), Math.max(this.to, range.to))
+        };
     }
 
-    public Range[] getIntervalsDifference(Range range1, Range range2) {
-        double from1 = range1.getFrom();
-        double to1 = range1.getTo();
-        double from2 = range2.getFrom();
-        double to2 = range2.getTo();
-        Range[] difference;
-        Range differenceRange;
-
-        if (to1 <= to2 && from1 >= from2) {
-            return null;
-        } else if (from1 < from2 && to1 <= to2) {
-            differenceRange = new Range(from1, from2);
-
-            difference = new Range[1];
-            difference[0] = differenceRange;
-
-            return difference;
-        } else if (from1 >= from2) {
-            differenceRange = new Range(to2, to1);
-
-            difference = new Range[1];
-            difference[0] = differenceRange;
-
-            return difference;
+    public Range[] getDifference(Range range) {
+        if (this.to <= range.to && this.from >= range.from) {
+            return new Range[] {};
         }
 
-        Range differenceRange1 = new Range(from1, from2);
-        Range differenceRange2 = new Range(to2, to1);
+        if (this.to <= range.from || this.from >= range.to) {
+            return new Range[] {
+                    new Range(this.from, this.to)
+            };
+        }
 
-        difference = new Range[2];
-        difference[0] = differenceRange1;
-        difference[1] = differenceRange2;
+        if (this.from < range.from && this.to < range.to) {
+            return new Range[] {
+                    new Range(this.from, range.from)
+            };
+        }
 
-        return difference;
+        if (this.from >= range.from) {
+            return new Range[] {
+                    new Range(range.to, this.to)
+            };
+        }
+
+        return new Range[] {
+                new Range(this.from, range.from),
+                new Range(range.to, this.to)
+        };
     }
 }
