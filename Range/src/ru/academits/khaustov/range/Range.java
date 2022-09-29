@@ -33,14 +33,11 @@ public class Range {
         return number >= from && number <= to;
     }
 
-    public String toString(Range range) {
-        return
-                "Начало первого диапазона: " + this.from + "\n"
-                        + "Конец первого диапазона: " + this.to + "\n"
-                        + "Начало второго диапазона: " + range.from + "\n"
-                        + "Конец второго диапазона: " + range.to + "\n"
-                        + "Длина первого диапазона равна: " + this.getLength() + "\n"
-                        + "Длина второго диапазона равна: " + range.getLength();
+    @Override
+    public String toString() {
+        return "Начало диапазона: " + from + ". "
+                + "Конец диапазона: " + to + ". "
+                + "Длина диапазона равна: " + getLength() + ". ";
     }
 
     public Range getIntersection(Range range) {
@@ -75,13 +72,13 @@ public class Range {
             };
         }
 
-        if (this.from < range.from && this.to < range.to) {
+        if (this.from <= range.from && this.to <= range.to) {
             return new Range[] {
                     new Range(this.from, range.from)
             };
         }
 
-        if (this.from >= range.from) {
+        if (this.from > range.from) {
             return new Range[] {
                     new Range(range.to, this.to)
             };
