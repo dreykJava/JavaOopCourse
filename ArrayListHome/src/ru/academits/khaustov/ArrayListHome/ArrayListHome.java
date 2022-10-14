@@ -1,4 +1,4 @@
-package ArrayListHome;
+package ru.academits.khaustov.ArrayListHome;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
