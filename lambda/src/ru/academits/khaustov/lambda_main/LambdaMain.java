@@ -37,12 +37,12 @@ public class LambdaMain {
                 .mapToInt(Person::getAge)
                 .average()
                 .ifPresent(System.out::println);
-
+/**
         Map<String, OptionalDouble> averageAgeByNames = persons.stream()
                 .sorted(Comparator.comparing(Person::getName))
                 .mapToInt(Person::getAge)
                 .average()
-                .collect(Collectors.groupingBy(Person::getName));
+                .collect(Collectors.groupingBy(Person::getName));  **/
 
         String personsBetween20and45 = persons.stream()
                 .filter(x -> x.getAge() >= 20 && x.getAge() <= 45)
