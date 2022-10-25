@@ -3,22 +3,20 @@ package ru.academits.khaustov.range_main;
 import ru.academits.khaustov.range.Range;
 
 public class RangeMain {
-    public static void printRangeArray(Range[] unionRange, Range[] differenceRange) {
-        if (unionRange.length == 1) {
-            System.out.printf("Объединение двух диапазонов: [(%f, %f)]%n", unionRange[0].getFrom(), unionRange[0].getTo());
-        } else {
-            System.out.printf("Объединение двух диапазонов: [(%f, %f), (%f, %f)]%n", unionRange[0].getFrom(), unionRange[0].getTo(),
-                    unionRange[1].getFrom(), unionRange[1].getTo());
+    public static String printRangeArray(Range[] range) {
+        int rangeLength = range.length;
+
+        if (rangeLength == 0) {
+            return "[]";
         }
 
-        if (differenceRange.length == 0) {
-            System.out.printf("Разность диапазонов равна []%n");
-        } else if (differenceRange.length == 1) {
-            System.out.printf("Разность диапазонов равна: [(%f, %f)]%n", differenceRange[0].getFrom(), differenceRange[0].getTo());
-        } else {
-            System.out.printf("Разность диапазонов равна: [(%f, %f), (%f, %f)]%n", differenceRange[0].getFrom(), differenceRange[0].getTo(),
-                    differenceRange[1].getFrom(), differenceRange[1].getTo());
+        StringBuilder rangeArray = new StringBuilder("[(" + range[0].getFrom() + "; " + range[0].getTo() + ")");
+
+        for (int i = 1; i < rangeLength; i++) {
+            rangeArray.append(", (").append(range[i].getFrom()).append("; ").append(range[i].getTo()).append(")");
         }
+
+        return rangeArray + "]";
     }
 
     public static void main(String[] args) {
@@ -44,18 +42,19 @@ public class RangeMain {
             System.out.println("Число " + number + " не принадлежит второму диапазону");
         }
 
-        Range rangeIntersection = range1.getIntersection(range2);
+        Range rangesIntersection = range1.getIntersection(range2);
 
-        if (rangeIntersection == null) {
+        if (rangesIntersection == null) {
             System.out.println("Диапазоны не пересекаются");
         } else {
-            System.out.println("Диапазоны пересекаются в точках: (" + rangeIntersection.getFrom() + ", " + rangeIntersection.getTo() + ")");
+            System.out.println("Диапазоны пересекаются в точках: (" + rangesIntersection.getFrom() + ", " + rangesIntersection.getTo() + ")");
         }
 
-        Range[] rangeUnion = range1.getUnion(range2);
-        Range[] rangeDifference = range1.getDifference(range2);
+        Range[] rangesUnion = range1.getUnion(range2);
+        Range[] rangesDifference = range1.getDifference(range2);
 
-        printRangeArray(rangeUnion, rangeDifference);
+        System.out.println("Объединение диапазонов: " + printRangeArray(rangesUnion));
+        System.out.println("Разность диапазонов: " + printRangeArray(rangesDifference));
 
         System.out.println();
 
@@ -81,17 +80,20 @@ public class RangeMain {
             System.out.println("Число " + number + " не принадлежит второму диапазону");
         }
 
-        rangeIntersection = range1.getIntersection(range2);
+        rangesIntersection = range1.getIntersection(range2);
 
-        if (rangeIntersection == null) {
+        if (rangesIntersection == null) {
             System.out.println("Диапазоны не пересекаются");
         } else {
-            System.out.println("Диапазоны пересекаются в точках: (" + rangeIntersection.getFrom() + ", " + rangeIntersection.getTo() + ")");
+            System.out.println("Диапазоны пересекаются в точках: (" + rangesIntersection.getFrom() + ", " + rangesIntersection.getTo() + ")");
         }
 
-        rangeUnion = range1.getUnion(range2);
-        rangeDifference = range1.getDifference(range2);
+        rangesUnion = range1.getUnion(range2);
+        rangesDifference = range1.getDifference(range2);
 
-        printRangeArray(rangeUnion, rangeDifference);
+        System.out.println("Объединение диапазонов: " + printRangeArray(rangesUnion));
+        System.out.println("Разность диапазонов: " + printRangeArray(rangesDifference));
+
+
     }
 }
