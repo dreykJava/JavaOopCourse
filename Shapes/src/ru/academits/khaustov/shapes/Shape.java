@@ -1,8 +1,11 @@
-package ru.academits.khaustov.shapes_Interface;
+package ru.academits.khaustov.shapes;
 
 public interface Shape {
     double getWidth();
+
     double getHeight();
+
     double getArea();
+
     double getPerimeter();
 }
