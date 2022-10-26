@@ -1,82 +1,75 @@
 package ru.academits.khaustov.ArrayListHome;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.Arrays;
 
 public class ArrayListHome {
-    public static ArrayList<String> getFileLinesArrayList(String fileName) throws FileNotFoundException {
-        ArrayList<String> linesArrayList = new ArrayList<>();
+    public static ArrayList<String> getFileLinesList(String fileName) {
+        ArrayList<String> linesList = new ArrayList<>();
 
-        try (Scanner scanner = new Scanner(new FileInputStream(fileName))) {
-            while(scanner.hasNextLine()) {
-                String fileString = scanner.nextLine();
-                linesArrayList.add(fileString);
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+            String line = reader.readLine();
+
+            while(line != null) {
+                linesList.add(line);
+
+                line = reader.readLine();
+            }
+
+            return linesList;
+        } catch (IOException e) {
+            return null;
+        }
+    }
+
+    public static void setOddNumbersList(ArrayList<Integer> list) {
+        int listLength = list.size();
+
+        for (int i = 0; i < listLength; ) {
+            if (list.get(i) % 2 == 0) {
+                list.remove(i);
+                listLength -= 1;
+            } else {
+                i++;
+            }
+        }
+    }
+
+    public static ArrayList<Integer> getNonDuplicateList(ArrayList<Integer> list) {
+        ArrayList<Integer> newList = new ArrayList<>(list.size());
+
+        for (Integer number : list) {
+            if (!newList.contains(number)) {
+                newList.add(number);
             }
         }
 
-        return linesArrayList;
+        return newList;
     }
 
-    public static ArrayList<Integer> getOddNumbersArrayList(ArrayList<Integer> intArrayList) {
-        for (int i = 0; i <= intArrayList.size() - 1; i++) {
-            while (intArrayList.get(i) % 2 == 0) {
-                int j;
+    public static void main(String[] args) {
+        String fileName = "ArrayListHomeTextFile.txt";
 
-                for (j = i + 1; j <= intArrayList.size() - 1 && intArrayList.get(j) != null; j++) {
-                    intArrayList.set(j - 1, intArrayList.get(j));
-                }
+        ArrayList<String> linesList = getFileLinesList(fileName);
 
-                intArrayList.remove(j - 1);
-            }
+        if (linesList  == null) {
+            System.out.println("Файл '" + fileName + "' не найден.");
+        } else {
+            System.out.println("Список строк из файла: " + linesList);
         }
 
-        return intArrayList;
-    }
+        System.out.println();
 
-    public static ArrayList<Integer> getNonDuplicateArrayList(ArrayList<Integer> intArrayList) {
-        for (int i = 0; i <= intArrayList.size() - 2; i++) {
-            for (int j = i + 1; j <= intArrayList.size() - 1; j++) {
-                if (intArrayList.get(i).equals(intArrayList.get(j))) {
-                    int k;
+        ArrayList<Integer> list = new ArrayList<>(Arrays.asList(12, 21, 233, 64, 12, 63));
+        System.out.println("Список до изменений: " + list);
+        setOddNumbersList(list);
+        System.out.println("Список нечётных значений: " + list);
 
-                    for (k = j + 1; k <= intArrayList.size() - 1 && intArrayList.get(k) != null; k++) {
-                        intArrayList.set(k - 1, intArrayList.get(k));
-                    }
+        System.out.println();
 
-                    intArrayList.remove(k - 1);
-                }
-            }
-        }
-
-        return intArrayList;
-    }
-
-    public static void main(String[] args) throws FileNotFoundException {
-        Scanner scanner = new Scanner(System.in);
-
-        String filename = scanner.nextLine();
-        System.out.println("Список строк из файла: " + getFileLinesArrayList(filename));
-
-        ArrayList<Integer> intArrayList = new ArrayList<>(10);
-        intArrayList.add(12);
-        intArrayList.add(21);
-        intArrayList.add(233);
-        intArrayList.add(64);
-        intArrayList.add(12);
-        intArrayList.add(63);
-
-        System.out.println("Список нечётных значений: " + getOddNumbersArrayList(intArrayList));
-
-        intArrayList = new ArrayList<>(10);
-        intArrayList.add(12);
-        intArrayList.add(12);
-        intArrayList.add(24);
-        intArrayList.add(13);
-        intArrayList.add(24);
-        intArrayList.add(26);
-
-        System.out.println("Неповторяющийся массив: " + getNonDuplicateArrayList(intArrayList));
+        list = new ArrayList<>(Arrays.asList(12, 12, 24, 13, 24, 26));
+        System.out.println("Список с дубликатами: " + list);
+        System.out.println("Список без дубликатов: " + getNonDuplicateList(list));
     }
 }
