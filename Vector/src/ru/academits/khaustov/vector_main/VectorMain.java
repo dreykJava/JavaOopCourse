@@ -2,8 +2,6 @@ package ru.academits.khaustov.vector_main;
 
 import ru.academits.khaustov.vector.Vector;
 
-import java.util.Arrays;
-
 public class VectorMain {
     public static void main(String[] args) {
         double[] array1 = {1.6, 2.6, 3.87, 7.12};
@@ -14,46 +12,54 @@ public class VectorMain {
         Vector vector2 = new Vector(array2);
         System.out.println("Значения второго вектора: " + vector2);
 
+        Vector vector3 = new Vector(12);
+
+        double[] array3 = {12, 6.4, 18, 34, 10};
+        Vector vector4 = new Vector(12, array3);
+
+        System.out.println("Результат умножения пустого вектора на вектор чисел: " + Vector.getMultiplication(vector3, vector4));
+
         System.out.println("Значения второго вектора: " + new Vector(vector2));
 
-        double[] vector1Values = vector1.getVectorValues();
-        System.out.println("Значения первого вектора: " + Arrays.toString(vector1Values));
+        System.out.println("Значения первого вектора: " + vector1);
 
-        Vector vector3 = new Vector(vector2.getSize());
+        vector1.setSum(vector2);
+        System.out.println("Результат сложения векторов: " + vector1);
 
-        vector3.setVectorValues(vector2.getVectorValues());
-        System.out.println("Значения третьего вектора: " + vector3);
-
-        System.out.println("Сумма векторов равна: " + vector1.getVectorsSum(vector2));
-        System.out.println("Разность векторов равна: " + vector1.getVectorDif(vector2));
+        vector1.setDifference(vector2);
+        System.out.println("Результат разности векторов: " + vector1);
 
         double number = 12.3;
-        System.out.println("Умножение вектора на число равно: " + vector1.getVectorAndScalarMulti(number));
-        System.out.println("Умножение вектора на число равно: " + vector2.getVectorAndScalarMulti(number));
+        vector1.setScalarMultiplication(number);
+        System.out.println("Умножение вектора на число равно: " + vector1);
 
-        System.out.println("Разворот вектора равен: " + vector1.getVectorInversion());
+        vector2.setScalarMultiplication(number);
+        System.out.println("Умножение вектора на число равно: " + vector2);
 
-        System.out.println("Длина вектора равна: " + vector1.getVectorLength());
+        vector1.setInversion();
+        System.out.println("Результат разворота вектора равен: " + vector1);
+
+        System.out.println("Длина вектора равна: " + vector1.getMagnitude());
 
         int valueIndex = 1;
-        System.out.println("Значение вектора с индексом " + valueIndex + " равно: " + vector1.getVectorValue(valueIndex));
+        System.out.println("Значение вектора с индексом " + valueIndex + " равно: " + vector1.getComponent(valueIndex));
 
-        vector1.setVectorValue(valueIndex, 12.4);
-        System.out.println("Значение вектора с индексом " + valueIndex + " равно: " + vector1.getVectorValue(valueIndex));
+        vector1.setComponent(valueIndex, 12.4);
+        System.out.println("Значение вектора с индексом " + valueIndex + " равно: " + vector1.getComponent(valueIndex));
 
-        vector2.setVectorValue(valueIndex, 10);
-        System.out.println("Значение вектора с индексом " + valueIndex + " равно: " + vector2.getVectorValue(valueIndex));
+        vector2.setComponent(valueIndex, 10);
+        System.out.println("Значение вектора с индексом " + valueIndex + " равно: " + vector2.getComponent(valueIndex));
 
-        Vector vectorsSum = Vector.getVectorsSum(vector1, vector2);
+        Vector vectorsSum = Vector.getSum(vector1, vector2);
         System.out.println("Сумма векторов равна: " + vectorsSum);
 
         System.out.println(vector1);
         System.out.println(vector2);
 
-        Vector vectorsDif = Vector.getVectorsDif(vector1, vector2);
+        Vector vectorsDif = Vector.getDifference(vector1, vector2);
         System.out.println("Разность векторов равна: " + vectorsDif);
 
-        double vectorsMulti = Vector.getVectorsMulti(vector1, vector2);
-        System.out.println("Сумма векторов равна: " + vectorsMulti);
+        double vectorsMultiplication = Vector.getMultiplication(vector1, vector2);
+        System.out.println("Сумма векторов равна: " + vectorsMultiplication);
     }
 }

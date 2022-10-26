@@ -3,156 +3,114 @@ package ru.academits.khaustov.vector;
 import java.util.Arrays;
 
 public class Vector {
-    private double[] vectorValues;
+    private final double[] components;
 
-    public Vector(int n) {
-        if (n <= 0) {
+    public Vector(int size) {
+        if (size <= 0) {
             throw new IllegalArgumentException("Размерность вектора должна быть > 0");
         }
 
-        vectorValues = new double[n];
-
-        for (int i = 0; i <= n - 1; i++) {
-            vectorValues[i] = 0;
-        }
+        components = new double[size];
     }
 
     public Vector(Vector vector) {
-         this.vectorValues = vector.vectorValues;
+        int size = vector.getSize();
+
+        components = new double[size];
+
+        System.arraycopy(vector.components, 0, components, 0, size);
     }
 
-    public Vector(double[] vectorValues) {
-        this.vectorValues = vectorValues;
+    public Vector(double[] components) {
+        int size = components.length;
+
+        this.components = new double[size];
+
+        System.arraycopy(components, 0, this.components, 0, size);
     }
 
-    public Vector(int n, double[] vectorValues) {
-        Vector vectorCopy = new Vector(n);
+    public Vector(int size, double[] components) {
+        this.components = new double[size];
 
-        for (int i = 0; i <= vectorValues.length - 1; i++) {
-            vectorCopy.vectorValues[i] = vectorValues[i];
-        }
-
-        this.vectorValues = vectorCopy.vectorValues;
-    }
-
-    public double[] getVectorValues() {
-        return vectorValues;
-    }
-
-    public void setVectorValues(double[] vectorValues) {
-        this.vectorValues = vectorValues;
+        System.arraycopy(components, 0, this.components, 0, components.length);
     }
 
     public int getSize() {
-        return vectorValues.length;
+        return components.length;
     }
 
     @Override
     public String toString() {
-        StringBuilder a = new StringBuilder("{");
+        StringBuilder string = new StringBuilder("{");
 
-        for (int i = 0; i <= vectorValues.length - 2; i++) {
-            a.append(vectorValues[i]);
-            a.append(", ");
+        for (int i = 0; i <= components.length - 2; i++) {
+            string.append(components[i]);
+            string.append(", ");
         }
 
-        a.append(vectorValues[vectorValues.length - 1]);
-        a.append("}");
+        string.append(components[components.length - 1]);
+        string.append("}");
 
-        return a.toString();
+        return string.toString();
     }
 
-    public Vector getVectorsSum(Vector vector) {
-        int maxVectorSize = Math.max(this.getSize(), vector.getSize());
+    public void setSum(Vector vector) {
+        for (int i = 0; i < Math.max(getSize(), vector.getSize()); i++) {
+            components[i] = components[i] + vector.components[i];
+        }
+    }
 
-        Vector vector1 = new Vector(maxVectorSize, this.vectorValues);
-        Vector vector2 = new Vector(maxVectorSize, vector.vectorValues);
-        Vector vectorsSum = new Vector(maxVectorSize);
+    public void setDifference(Vector vector) {
+        for (int i = 0; i < Math.max(getSize(), vector.getSize()); i++) {
+            components[i] = components[i] - vector.components[i];
+        }
+    }
 
-        for (int i = 0; i <= maxVectorSize - 1; i++) {
-            vectorsSum.vectorValues[i] = vector1.vectorValues[i] + vector2.vectorValues[i];
+    public void setScalarMultiplication(double scalar) {
+        for (int i = 0; i < getSize(); i++) {
+            components[i] = components[i] * scalar;
+        }
+    }
+
+    public void setInversion() {
+        setScalarMultiplication(-1);
+    }
+
+    public double getMagnitude() {
+        double magnitude = 0;
+
+        for (double component : components) {
+            magnitude += component * component;
         }
 
-        return vectorsSum;
+        return Math.sqrt(magnitude);
     }
 
-    public Vector getVectorDif(Vector vector) {
-        int maxVectorSize = Math.max(this.getSize(), vector.getSize());
-
-        Vector vector1 = new Vector(maxVectorSize, this.vectorValues);
-        Vector vector2 = new Vector(maxVectorSize, vector.vectorValues);
-        Vector vectorsDif = new Vector(maxVectorSize);
-
-        for (int i = 0; i <= maxVectorSize - 1; i++) {
-            vectorsDif.vectorValues[i] = vector1.vectorValues[i] - vector2.vectorValues[i];
-        }
-
-        return vectorsDif;
+    public double getComponent(int componentIndex) {
+        return components[componentIndex];
     }
 
-    public Vector getVectorAndScalarMulti(double scalar) {
-        Vector multi = new Vector(getSize());
-
-        for (int i = 0; i <= getSize() - 1; i++) {
-            multi.vectorValues[i] = vectorValues[i] * scalar;
-        }
-
-        return multi;
-    }
-
-    public Vector getVectorInversion() {
-        Vector inversion = new Vector(getSize());
-
-        for (int i = 0; i <= getSize() - 1; i++) {
-            inversion.vectorValues[i] = vectorValues[i] * -1;
-        }
-
-        return inversion;
-    }
-
-    public double getVectorLength() {
-        double vectorLength = 0;
-
-        for (int i = 0; i <= getSize() - 1; i++) {
-            vectorLength = vectorLength + Math.pow(vectorValues[i], 2);
-        }
-
-        return Math.sqrt(vectorLength);
-    }
-
-    public double getVectorValue(int valueIndex) {
-        return vectorValues[valueIndex];
-    }
-
-    public void setVectorValue(int valueIndex, double value) {
-        vectorValues[valueIndex] = value;
+    public void setComponent(int componentIndex, double component) {
+        components[componentIndex] = component;
     }
 
     @Override
-    public boolean equals(Object vector) {
-        if (vector == this) {
+    public boolean equals(Object object) {
+        if (object == this) {
             return true;
         }
 
-        if (vector == null || vector.getClass() != getClass()) {
+        if (object == null || object.getClass() != getClass()) {
             return false;
         }
 
-        Vector comparisonVector = (Vector) vector;
+        Vector vector = (Vector) object;
 
-        if (this.getSize() != comparisonVector.getSize()) {
+        if (getSize() != vector.getSize()) {
             return false;
         }
 
-        double epsilon = 1.0e-10;
-
-        for (int i = 0; i <= this.getSize() - 1;) {
-            if (Math.abs(this.vectorValues[i] - comparisonVector.vectorValues[i]) > epsilon) {
-                return false;
-            }
-        }
-
-        return true;
+        return Arrays.equals(components, vector.components);
     }
 
     @Override
@@ -160,47 +118,34 @@ public class Vector {
         final int prime = 31;
         int hash = 1;
 
-        hash = prime * hash + Arrays.hashCode(vectorValues);
+        hash = prime * hash + Arrays.hashCode(components);
 
         return hash;
     }
 
-    public static Vector getVectorsSum(Vector vector1, Vector vector2) {
-        int maxVectorSize = Math.max(vector1.getSize(), vector2.getSize());
-        vector1 = new Vector(maxVectorSize, vector1.vectorValues);
-        vector2 = new Vector(maxVectorSize, vector2.vectorValues);
-        Vector resultVector = new Vector(maxVectorSize);
+    public static Vector getSum(Vector vector1, Vector vector2) {
+        Vector result = new Vector(vector1);
 
-        for (int i = 0; i <= maxVectorSize - 1; i++) {
-            resultVector.vectorValues[i] = vector1.vectorValues[i] + vector2.vectorValues[i];
-        }
+        result.setSum(vector2);
 
-        return resultVector;
+        return result;
     }
 
-    public static Vector getVectorsDif(Vector vector1, Vector vector2) {
-        int maxVectorSize = Math.max(vector1.getSize(), vector2.getSize());
-        vector1 = new Vector(maxVectorSize, vector1.vectorValues);
-        vector2 = new Vector(maxVectorSize, vector2.vectorValues);
-        Vector resultVector = new Vector(maxVectorSize);
+    public static Vector getDifference(Vector vector1, Vector vector2) {
+        Vector result = new Vector(vector1);
 
-        for (int i = 0; i <= maxVectorSize - 1; i++) {
-            resultVector.vectorValues[i] = vector1.vectorValues[i] - vector2.vectorValues[i];
-        }
+        result.setDifference(vector2);
 
-        return resultVector;
+        return result;
     }
 
-    public static double getVectorsMulti(Vector vector1, Vector vector2) {
-        int maxVectorSize = Math.max(vector1.getSize(), vector2.getSize());
-        vector1 = new Vector(maxVectorSize, vector1.vectorValues);
-        vector2 = new Vector(maxVectorSize, vector2.vectorValues);
-        double resultVector = 0;
+    public static double getMultiplication(Vector vector1, Vector vector2) {
+        double product = 0;
 
-        for (int i = 0; i <= maxVectorSize - 1; i++) {
-            resultVector = resultVector + vector1.vectorValues[i] * vector2.vectorValues[i];
+        for (int i = 0; i < Math.max(vector1.getSize(), vector2.getSize()); i++) {
+            product += vector1.components[i] * vector2.components[i];
         }
 
-        return resultVector;
+        return product;
     }
 }
