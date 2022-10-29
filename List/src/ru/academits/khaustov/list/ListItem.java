@@ -1,8 +1,18 @@
-package ru.academits.khaustov.list_item;
+package ru.academits.khaustov.list;
 
-public class ListItem<T> {
+class ListItem<T> {
     private T data;
     private ListItem<T> next;
+
+    public ListItem(T data) {
+        this.data = data;
+        next = null;
+    }
+
+    public ListItem(T data, ListItem<T> next) {
+        this.data = data;
+        this.next = next;
+    }
 
     public T getData() {
         return data;
@@ -17,15 +27,6 @@ public class ListItem<T> {
     }
 
     public void setNext(ListItem<T> next) {
-        this.next = next;
-    }
-
-    public ListItem(T data) {
-        this.data = data;
-    }
-
-    public ListItem(T data, ListItem<T> next) {
-        this.data = data;
         this.next = next;
     }
 }

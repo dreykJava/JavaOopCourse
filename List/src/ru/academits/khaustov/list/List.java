@@ -1,130 +1,164 @@
 package ru.academits.khaustov.list;
 
-import ru.academits.khaustov.list_item.ListItem;
-
 public class List<T> {
     private ListItem<T> head;
-    private int count;
+    private int size;
 
-    public ListItem<T> getHead() {
-        return head;
+    public List() {
+        head = null;
+        size = 0;
     }
 
-    public List(ListItem<T> head, int count) {
-        this.count = count;
-        this.head = head;
+    public List(T first) {
+        head = new ListItem<>(first);
+        size = 1;
+    }
+
+    public List(List<T> list) {
+        if (list.head == null) {
+            throw new NullPointerException("Передан пустой список.");
+        }
+
+        head = new ListItem<>(list.head.getData());
+        ListItem<T> currentItem = head;
+
+        for (ListItem<T> copyItem = list.head.getNext(); copyItem != null; copyItem = copyItem.getNext(), currentItem = currentItem.getNext()) {
+            currentItem.setNext(new ListItem<>(copyItem.getData()));
+        }
+
+        size = list.getSize();
+    }
+
+    private void checkIndex(int index, int size) {
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException("Неправильный индекс. Допустимые значения: [" + 0 + "; " + (size - 1) + "].");
+        }
+    }
+
+    private ListItem<T> iterateToIndex(int index) {
+        int itemIndex = 0;
+        ListItem<T> item;
+
+        for (item = head; item != null; item = item.getNext(), itemIndex++) {
+            if (itemIndex == index) {
+                break;
+            }
+        }
+
+        return item;
     }
 
     public int getSize() {
-        return count;
+        return size;
     }
 
-    public T getHeadData() {
+    public T getFirst() {
+        if (head == null) {
+            throw new NullPointerException("В списке отсутствует первый элемент.");
+        }
+
         return head.getData();
     }
 
-    public T getItemData(int index) {
-        if (index < 0 || index >= count) {
-            throw new IllegalArgumentException("Индекс должен быть меньше размера списка и принимать положительные значения.");
-        }
+    public T get(int index) {
+        checkIndex(index, size);
 
-        int itemIndex = 0;
-        T itemData = null;
-
-        for (ListItem<T> item = head; item != null; item = item.getNext(), itemIndex++) {
-            if (itemIndex == index) {
-                itemData = item.getData();
-
-                break;
-            }
-        }
-
-        return itemData;
+        return iterateToIndex(index).getData();
     }
 
-    public T setItemData(int index, T data) {
-        if (index < 0 || index >= count) {
-            throw new IllegalArgumentException("Индекс должен быть меньше размера списка и принимать положительные значения.");
-        }
+    public T set(int index, T data) {
+        checkIndex(index, size);
 
-        int itemIndex = 0;
-        T lastData = null;
+        ListItem<T> item = iterateToIndex(index);
+        T oldData = item.getData();
+        item.setData(data);
 
-        for (ListItem<T> item = head; item != null; item = item.getNext(), itemIndex++) {
-            if (itemIndex == index) {
-                lastData = item.getData();
-                item.setData(data);
-
-                break;
-            }
-        }
-
-        return lastData;
+        return oldData;
     }
 
-    public T removeItem(int index) {
-        if (index < 0 || index >= count) {
-            throw new IllegalArgumentException("Индекс должен быть меньше размера списка и принимать положительные значения.");
-        }
-
-        T itemData = null;
+    public T remove(int index) {
+        checkIndex(index, size);
 
         if (index == 0) {
-            itemData = head.getData();
-            head = head.getNext();
-
-            count--;
-
-            return itemData;
+            return removeFirst();
         }
 
-        int itemIndex = 1;
+        ListItem<T> item = iterateToIndex(index - 1);
+        T deletedData = item.getNext().getData();
+        item.setNext(item.getNext().getNext());
 
-        for (ListItem<T> item = head; item.getNext() != null; item = item.getNext()) {
-            if (itemIndex == index) {
-                itemData = item.getNext().getData();
-                item.setNext(item.getNext().getNext());
+        size--;
 
-                break;
-            }
+        return deletedData;
+    }
+
+    public void addFirst(T data) {
+        if (head == null) {
+            head = new ListItem<>(data);
+
+            size++;
+
+            return;
         }
 
-        count--;
+        ListItem<T> previousHead = head;
+        head = new ListItem<>(data, previousHead);
 
-        return itemData;
+        size++;
     }
 
-    public void addBeginning(ListItem<T> item) {
-        item.setNext(head);
-        head = item;
+    public void add(int index, T data) {
+        if (index < 0 || index > size) {
+            throw new IndexOutOfBoundsException("Неправильный индекс. Дпоустимые значения: [" + 0 + "; " + size + "].");
+        }
 
-        count++;
-    }
+        if (index == 0) {
+            addFirst(data);
 
-    public void addIndexItem(int index, ListItem<T> item) {
-        if (index < 0 || index >= count) {
-            throw new IllegalArgumentException("Индекс должен быть меньше размера списка и принимать положительные значения.");
+            return;
         }
 
         int i = 1;
 
-        for (ListItem<T> newItem = head; newItem.getNext() != null; newItem = newItem.getNext(), i++) {
+        for (ListItem<T> item = head; item != null; item = item.getNext(), i++) {
             if (i == index) {
-                item.setNext(newItem.getNext().getNext());
-                newItem.setNext(item);
+                ListItem<T> addingItem = new ListItem<>(data, item.getNext());
+                item.setNext(addingItem);
 
                 break;
             }
         }
 
-        count++;
+        size++;
     }
 
-    public boolean removeItem(T data) {
-        if (data.equals(head.getData())) {
-            head = head.getNext();
+    public boolean remove(T data) {
+        if (head == null) {
+            throw new NullPointerException("Список пуст.");
+        }
 
-            count--;
+        if (data == null) {
+            if (head.getData() == null) {
+                removeFirst();
+
+                return true;
+            }
+
+            for (ListItem<T> item = head; item.getNext() != null; item = item.getNext()) {
+                if (item.getNext().getData() == null) {
+                    item.setNext(item.getNext().getNext());
+
+                    size--;
+
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        if (data.equals(head.getData())) {
+            removeFirst();
 
             return true;
         }
@@ -133,7 +167,7 @@ public class List<T> {
             if (data.equals(item.getNext().getData())) {
                 item.setNext(item.getNext().getNext());
 
-                count--;
+                size--;
 
                 return true;
             }
@@ -142,47 +176,52 @@ public class List<T> {
         return false;
     }
 
-    public T removeHead() {
-        T itemData = head.getData();
+    public T removeFirst() {
+        if (head == null) {
+            throw new NullPointerException("Первый элемент отсутствует.");
+        }
+
+        T deletedData = head.getData();
         head = head.getNext();
 
-        count--;
+        size--;
 
-        return itemData;
+        return deletedData;
     }
 
-    public void reverseList() {
-        if (count >= 2) {
-            ListItem<T> itemCopy2 = head.getNext().getNext();
+    public void reverse() {
+        if (size < 2) {
+            return;
+        }
 
-            head.getNext().setNext(head);
-            ListItem<T> itemCopy1 = head.getNext();
+        ListItem<T> current = head;
+        ListItem<T> temp;
 
-            head.setNext(null);
-
-            for (ListItem<T> item = itemCopy2; item != null; item = item.getNext(), itemCopy2 = item) {
-                itemCopy2.setNext(itemCopy1);
-                itemCopy1 = itemCopy2;
-            }
-
-            head = itemCopy1;
+        for (temp = current.getNext(); temp != null; temp = current.getNext()) {
+            current.setNext(current.getNext().getNext());
+            temp.setNext(head);
+            head = temp;
         }
     }
 
-    public List<T> copyList() {
-        ListItem<T> listCopyItem = head;
+    public List<T> copy() {
+        List<T> listCopy = new List<>(head.getData());
+        int index = 1;
 
-        List<T> listCopy = new List<>(listCopyItem, count);
-
-        for (ListItem<T> item = head.getNext(); item != null; item = item.getNext(), listCopyItem = listCopyItem.getNext()) {
-            listCopyItem.setNext(item);
+        for (ListItem<T> item = head.getNext(); item != null; item = item.getNext(), index++) {
+            listCopy.add(index, item.getData());
         }
+
+        listCopy.size = size;
 
         return listCopy;
     }
 
-    @Override
-    public String toString() {
+    public String stringBuilder() {
+        if (head == null) {
+            return "[]";
+        }
+
         StringBuilder string = new StringBuilder("[");
 
         string.append(head.getData());
