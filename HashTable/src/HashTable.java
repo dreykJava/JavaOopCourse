@@ -13,8 +13,9 @@ public class HashTable<T> implements Collection<T> {
     }
 
     public HashTable(int capacity, T[][] hashTable) {
-        if (capacity >= hashTable.length)
+        if (capacity >= hashTable.length) {
             this.hashTable = Arrays.copyOf(hashTable, capacity);
+        }
     }
 
     public HashTable(int capacity) {
