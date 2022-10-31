@@ -1,31 +1,68 @@
 package ru.academits.khaustov.tree_main;
 
 import ru.academits.khaustov.tree.Tree;
-import ru.academits.khaustov.tree_node.TreeNode;
+
+import java.util.function.Consumer;
 
 public class TreeMain {
     public static void main(String[] args) {
-        Tree<Integer> newTree = new Tree<>();
+        Tree<Integer> tree1 = new Tree<>();
+        tree1.add(12);
 
-        TreeNode<Integer> firstNode = new TreeNode<>(6);
-        TreeNode<Integer> secondNode = new TreeNode<>(4);
-        TreeNode<Integer> thirdNode = new TreeNode<>(5);
-        TreeNode<Integer> fourthNode = new TreeNode<>(11);
+        System.out.println("Корень первого дерева: " + tree1.getRoot());
 
-        newTree.setTreeNode(firstNode);
+        tree1.add(13);
+        tree1.add(14);
+        tree1.add(0);
 
-        System.out.println(newTree.getTreeRoot().getData());
+        Consumer<Integer> consumer = x -> System.out.print(x + "; ");
 
-        newTree.setTreeNode(secondNode);
+        System.out.print("Элементы первого дерева: ");
+        tree1.passWidth(consumer);
+        System.out.println();
 
-        System.out.println(newTree.getTreeRoot().getData());
+        tree1.add(-10);
+        tree1.add(19);
 
-        newTree.setTreeNode(thirdNode);
+        System.out.print("Элементы первого дерева: ");
+        tree1.passDeep(consumer);
+        System.out.println();
 
-        System.out.println(newTree.getTreeRoot().getData());
+        tree1.add(-11);
+        tree1.add(-11);
 
-        newTree.setTreeNode(fourthNode);
+        System.out.print("Элементы первого дерева: ");
+        tree1.passDeepRecursive(consumer);
+        System.out.println();
 
-        System.out.println(newTree.getTreeRoot().getData());
+        if (tree1.contains(-11)) {
+            System.out.println("Первое дерево содержит элемент " + -11);
+        } else {
+            System.out.println("Первое дерево не содержит элемент " + -11);
+        }
+
+        if (tree1.contains(1)) {
+            System.out.println("Первое дерево содержит элемент " + 1);
+        } else {
+            System.out.println("Первое дерево не содержит элемент " + 1);
+        }
+
+        if (tree1.remove(11)) {
+            System.out.println("Из первого дерева был удалён элемент " + 11);
+        } else {
+            System.out.println("Из первого дерева не был удалён элемент " + 11);
+        }
+
+        if (tree1.remove(-11)) {
+            System.out.println("Из первого дерева был удалён элемент " + -11);
+        } else {
+            System.out.println("Из первого дерева не был удалён элемент " + -11);
+        }
+
+        System.out.print("Элементы первого дерева: ");
+        tree1.passDeep(consumer);
+        System.out.println();
+
+        System.out.println("Размер первого дерева: " + tree1.getSize());
     }
 }

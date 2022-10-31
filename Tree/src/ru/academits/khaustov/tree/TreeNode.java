@@ -1,6 +1,6 @@
-package ru.academits.khaustov.tree_node;
+package ru.academits.khaustov.tree;
 
-public class TreeNode<T> {
+class TreeNode<T> {
     private TreeNode<T> left;
     private TreeNode<T> right;
     private T data;
