@@ -17,29 +17,29 @@ public class VectorMain {
         double[] array3 = {12, 6.4, 18, 34, 10};
         Vector vector4 = new Vector(12, array3);
 
-        System.out.println("Результат умножения пустого вектора на вектор чисел: " + Vector.getMultiplication(vector3, vector4));
+        System.out.println("Результат умножения пустого вектора на вектор чисел: " + Vector.getScalarProduct(vector3, vector4));
 
         System.out.println("Значения второго вектора: " + new Vector(vector2));
 
         System.out.println("Значения первого вектора: " + vector1);
 
-        vector1.setSum(vector2);
+        vector1.add(vector2);
         System.out.println("Результат сложения векторов: " + vector1);
 
-        vector1.setDifference(vector2);
+        vector1.subtract(vector2);
         System.out.println("Результат разности векторов: " + vector1);
 
         double number = 12.3;
-        vector1.setScalarMultiplication(number);
+        vector1.multiplyScalar(number);
         System.out.println("Умножение вектора на число равно: " + vector1);
 
-        vector2.setScalarMultiplication(number);
+        vector2.multiplyScalar(number);
         System.out.println("Умножение вектора на число равно: " + vector2);
 
-        vector1.setInversion();
+        vector1.invert();
         System.out.println("Результат разворота вектора равен: " + vector1);
 
-        System.out.println("Длина вектора равна: " + vector1.getMagnitude());
+        System.out.println("Длина вектора равна: " + vector1.getLength());
 
         int valueIndex = 1;
         System.out.println("Значение вектора с индексом " + valueIndex + " равно: " + vector1.getComponent(valueIndex));
@@ -59,7 +59,7 @@ public class VectorMain {
         Vector vectorsDif = Vector.getDifference(vector1, vector2);
         System.out.println("Разность векторов равна: " + vectorsDif);
 
-        double vectorsMultiplication = Vector.getMultiplication(vector1, vector2);
+        double vectorsMultiplication = Vector.getScalarProduct(vector1, vector2);
         System.out.println("Сумма векторов равна: " + vectorsMultiplication);
     }
 }
