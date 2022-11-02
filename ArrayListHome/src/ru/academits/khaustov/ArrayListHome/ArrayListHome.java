@@ -3,6 +3,7 @@ package ru.academits.khaustov.ArrayListHome;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.NoSuchElementException;
 
 public class ArrayListHome {
     public static ArrayList<String> getFileLinesList(String fileName) {
@@ -11,7 +12,7 @@ public class ArrayListHome {
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
             String line = reader.readLine();
 
-            while(line != null) {
+            while (line != null) {
                 linesList.add(line);
 
                 line = reader.readLine();
@@ -19,17 +20,14 @@ public class ArrayListHome {
 
             return linesList;
         } catch (IOException e) {
-            return null;
+            throw new NoSuchElementException("Файла с названием " + fileName + " не существует.");
         }
     }
 
-    public static void setOddNumbersList(ArrayList<Integer> list) {
-        int listLength = list.size();
-
-        for (int i = 0; i < listLength; ) {
+    public static void retainOddNumbers(ArrayList<Integer> list) {
+        for (int i = 0; i < list.size(); ) {
             if (list.get(i) % 2 == 0) {
                 list.remove(i);
-                listLength -= 1;
             } else {
                 i++;
             }
@@ -49,23 +47,16 @@ public class ArrayListHome {
     }
 
     public static void main(String[] args) {
-        String fileName = "ArrayListHomeTextFile.txt";
+        String fileName = "ArrayListHomeTextFil.txt";
 
         ArrayList<String> linesList = getFileLinesList(fileName);
-
-        if (linesList  == null) {
-            System.out.println("Файл '" + fileName + "' не найден.");
-        } else {
-            System.out.println("Список строк из файла: " + linesList);
-        }
-
+        System.out.println("Список строк из файла: " + linesList);
         System.out.println();
 
         ArrayList<Integer> list = new ArrayList<>(Arrays.asList(12, 21, 233, 64, 12, 63));
         System.out.println("Список до изменений: " + list);
-        setOddNumbersList(list);
+        retainOddNumbers(list);
         System.out.println("Список нечётных значений: " + list);
-
         System.out.println();
 
         list = new ArrayList<>(Arrays.asList(12, 12, 24, 13, 24, 26));
