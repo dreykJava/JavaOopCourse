@@ -65,9 +65,13 @@ public class Triangle implements Shape {
         this.y3 = y3;
     }
 
-    public double getSideLength(double coordinate1, double coordinate2, double coordinate3) {
+    private static double getSideLength(double coordinate1, double coordinate2, double coordinate3) {
         return Math.max(coordinate1, Math.max(coordinate2, coordinate3)) -
                 Math.min(coordinate1, Math.min(coordinate2, coordinate3));
+    }
+
+    private static double getSideLength(double x1, double x2, double y1, double y2) {
+        return Math.sqrt(Math.pow((x2 - x1), 2) + Math.pow((y2 - y1), 2));
     }
 
     @Override
@@ -82,20 +86,17 @@ public class Triangle implements Shape {
 
     @Override
     public double getArea() {
-        return Math.abs((x1 - x3) * (y2 - y3) / (y1 - y3) / (x2 - x3)) / 2;
+        return Math.abs(((x2 - x1)) * (y3 - y1) - (x3 - x1) * (y2 - y1)) * (1 / 2.0);
     }
 
     @Override
     public double getPerimeter() {
-        return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2)) +
-                Math.sqrt(Math.pow(x3 - x1, 2) + Math.pow(y3 - y1, 2)) +
-                Math.sqrt(Math.pow(x3 - x2, 2) + Math.pow(y3 - y2, 2));
+        return getSideLength(x1, x2, y1, y2) + getSideLength(x1, x3, y1, y3) + getSideLength(x2, x3, y2, y3);
     }
 
     @Override
     public String toString() {
-        return "Треугольник с координатами: x1 = " +
-                x1 + ", y1 = " + y1 + ", x2 = " + x2 + ", y2 = " + y2 + ", x3 = " + x3 + ", y3 = " + y3 + ".";
+        return "Треугольник с координатами: (" + x1 + ", " + y1 + "), (" + x2 + ", " + y2 + "), (" + x3 + ", " + y3 + ").";
     }
 
     @Override
