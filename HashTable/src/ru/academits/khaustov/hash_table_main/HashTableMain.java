@@ -40,7 +40,7 @@ public class HashTableMain {
         table2.add(element);
         table2.add(null);
 
-        System.out.println("Рзмер второй таблицы: " + table2.size());
+        System.out.println("Размер второй таблицы: " + table2.size());
 
         if (table2.contains(element)) {
             System.out.println("Вторая таблица содержит элемент " + element);
