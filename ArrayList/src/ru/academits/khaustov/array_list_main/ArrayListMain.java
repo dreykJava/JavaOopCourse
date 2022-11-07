@@ -4,7 +4,6 @@ import ru.academits.khaustov.array_list.ArrayList;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.LinkedList;
 
 public class ArrayListMain {
     public static void main(String[] args) {
