@@ -1,22 +1,24 @@
 package ru.academits.khaustov.list;
 
+import java.util.NoSuchElementException;
+import java.util.Objects;
+
 public class List<T> {
     private ListItem<T> head;
     private int size;
 
     public List() {
-        head = null;
-        size = 0;
+
     }
 
-    public List(T first) {
-        head = new ListItem<>(first);
+    public List(T data) {
+        head = new ListItem<>(data);
         size = 1;
     }
 
     public List(List<T> list) {
-        if (list.head == null) {
-            throw new NullPointerException("Передан пустой список.");
+        if (list == null) {
+            throw new NullPointerException("null - недопустимое значение для списка");
         }
 
         head = new ListItem<>(list.head.getData());
@@ -29,13 +31,13 @@ public class List<T> {
         size = list.getSize();
     }
 
-    private void checkIndex(int index, int size) {
+    private static void checkIndex(int index, int size) {
         if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException("Неправильный индекс. Допустимые значения: [" + 0 + "; " + (size - 1) + "].");
+            throw new IndexOutOfBoundsException(index + " - неправильный индекс. Допустимые значения: [0; " + (size - 1) + "].");
         }
     }
 
-    private ListItem<T> iterateToIndex(int index) {
+    private ListItem<T> getItem(int index) {
         int itemIndex = 0;
         ListItem<T> item;
 
@@ -54,7 +56,7 @@ public class List<T> {
 
     public T getFirst() {
         if (head == null) {
-            throw new NullPointerException("В списке отсутствует первый элемент.");
+            throw new NoSuchElementException("Список пуст.");
         }
 
         return head.getData();
@@ -63,13 +65,13 @@ public class List<T> {
     public T get(int index) {
         checkIndex(index, size);
 
-        return iterateToIndex(index).getData();
+        return getItem(index).getData();
     }
 
     public T set(int index, T data) {
         checkIndex(index, size);
 
-        ListItem<T> item = iterateToIndex(index);
+        ListItem<T> item = getItem(index);
         T oldData = item.getData();
         item.setData(data);
 
@@ -83,34 +85,23 @@ public class List<T> {
             return removeFirst();
         }
 
-        ListItem<T> item = iterateToIndex(index - 1);
-        T deletedData = item.getNext().getData();
-        item.setNext(item.getNext().getNext());
+        ListItem<T> previousItem = getItem(index - 1);
+        T removedData = previousItem.getNext().getData();
+        previousItem.setNext(previousItem.getNext().getNext());
 
         size--;
 
-        return deletedData;
+        return removedData;
     }
 
     public void addFirst(T data) {
-        if (head == null) {
-            head = new ListItem<>(data);
-
-            size++;
-
-            return;
-        }
-
-        ListItem<T> previousHead = head;
-        head = new ListItem<>(data, previousHead);
+        head = new ListItem<>(data, head);
 
         size++;
     }
 
     public void add(int index, T data) {
-        if (index < 0 || index > size) {
-            throw new IndexOutOfBoundsException("Неправильный индекс. Дпоустимые значения: [" + 0 + "; " + size + "].");
-        }
+        checkIndex(index, size + 1);
 
         if (index == 0) {
             addFirst(data);
@@ -118,53 +109,25 @@ public class List<T> {
             return;
         }
 
-        int i = 1;
-
-        for (ListItem<T> item = head; item != null; item = item.getNext(), i++) {
-            if (i == index) {
-                ListItem<T> addingItem = new ListItem<>(data, item.getNext());
-                item.setNext(addingItem);
-
-                break;
-            }
-        }
+        ListItem<T> previousItem = getItem(index - 1);
+        previousItem.setNext(new ListItem<>(data, previousItem.getNext()));
 
         size++;
     }
 
     public boolean remove(T data) {
         if (head == null) {
-            throw new NullPointerException("Список пуст.");
-        }
-
-        if (data == null) {
-            if (head.getData() == null) {
-                removeFirst();
-
-                return true;
-            }
-
-            for (ListItem<T> item = head; item.getNext() != null; item = item.getNext()) {
-                if (item.getNext().getData() == null) {
-                    item.setNext(item.getNext().getNext());
-
-                    size--;
-
-                    return true;
-                }
-            }
-
             return false;
         }
 
-        if (data.equals(head.getData())) {
+        if (Objects.equals(data, head.getData())) {
             removeFirst();
 
             return true;
         }
 
         for (ListItem<T> item = head; item.getNext() != null; item = item.getNext()) {
-            if (data.equals(item.getNext().getData())) {
+            if (Objects.equals(data, item.getNext().getData())) {
                 item.setNext(item.getNext().getNext());
 
                 size--;
@@ -178,15 +141,15 @@ public class List<T> {
 
     public T removeFirst() {
         if (head == null) {
-            throw new NullPointerException("Первый элемент отсутствует.");
+            throw new NoSuchElementException("Список пуст.");
         }
 
-        T deletedData = head.getData();
+        T removedData = head.getData();
         head = head.getNext();
 
         size--;
 
-        return deletedData;
+        return removedData;
     }
 
     public void reverse() {
@@ -205,34 +168,30 @@ public class List<T> {
     }
 
     public List<T> copy() {
-        List<T> listCopy = new List<>(head.getData());
-        int index = 1;
-
-        for (ListItem<T> item = head.getNext(); item != null; item = item.getNext(), index++) {
-            listCopy.add(index, item.getData());
+        if (head == null) {
+            return null;
         }
 
-        listCopy.size = size;
-
-        return listCopy;
+        return new List<>(this);
     }
 
-    public String stringBuilder() {
+    @Override
+    public String toString() {
         if (head == null) {
             return "[]";
         }
 
-        StringBuilder string = new StringBuilder("[");
+        StringBuilder stringBuilder = new StringBuilder("[");
 
-        string.append(head.getData());
+        stringBuilder.append(head.getData());
 
         for (ListItem<T> item = head.getNext(); item != null; item = item.getNext()) {
-            string.append(", ");
-            string.append(item.getData());
+            stringBuilder.append(", ");
+            stringBuilder.append(item.getData());
         }
 
-        string.append("]");
+        stringBuilder.append("]");
 
-        return string.toString();
+        return stringBuilder.toString();
     }
 }

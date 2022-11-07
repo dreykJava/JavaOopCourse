@@ -7,31 +7,31 @@ public class ListMain {
         List<Integer> list1 = new List<>();
         List<Integer> list2 = new List<>(0);
 
-        System.out.println("Первый список: " + list1.stringBuilder());
-        System.out.println("Второй список: " + list2.stringBuilder());
+        System.out.println("Первый список: " + list1);
+        System.out.println("Второй список: " + list2);
 
         List<Integer> list3 = new List<>(list2);
 
-        System.out.println("Третий список: " + list3.stringBuilder());
+        System.out.println("Третий список: " + list3);
 
         list3.addFirst(1);
         list2.add(0, null);
         list2.add(2, 1);
 
         System.out.println();
-        System.out.println("Второй список: " + list2.stringBuilder());
-        System.out.println("Третий список: " + list3.stringBuilder());
+        System.out.println("Второй список: " + list2);
+        System.out.println("Третий список: " + list3);
 
         int oldData = list3.set(0, null);
         System.out.println();
         System.out.println("Старое значение элемента третьего списка с индексом 0: " + oldData);
         System.out.println("Значение элемента третьего списка с индексом 0: " + list3.getFirst());
         System.out.println("Значение элемента третьего списка с индексом 1: " + list3.get(1));
-        System.out.println("Третий список: " + list3.stringBuilder());
+        System.out.println("Третий список: " + list3);
 
         System.out.println();
         System.out.println("Удалённое значение третьего списка: " + list3.remove(0));
-        System.out.println("Третий список: " + list3.stringBuilder());
+        System.out.println("Третий список: " + list3);
 
         boolean isRemoved = list3.remove(null);
 
@@ -52,7 +52,7 @@ public class ListMain {
         list4.reverse();
 
         System.out.println();
-        System.out.println("Второй список: " + list2.stringBuilder());
-        System.out.println("Перевёрнутый второй список: " + list4.stringBuilder());
+        System.out.println("Второй список: " + list2);
+        System.out.println("Перевёрнутый второй список: " + list4);
     }
 }

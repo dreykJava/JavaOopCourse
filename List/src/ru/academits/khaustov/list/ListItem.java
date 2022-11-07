@@ -6,7 +6,6 @@ class ListItem<T> {
 
     public ListItem(T data) {
         this.data = data;
-        next = null;
     }
 
     public ListItem(T data, ListItem<T> next) {
